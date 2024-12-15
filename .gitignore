@@ -8,3 +8,4 @@ share/
 eleven.py
 pyvenv.cfg
 test.py
+.gitignore

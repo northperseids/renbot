@@ -1,6 +1,6 @@
 # renbot
 
-Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can be used by up to four users and does not use a database, so it can be run standalone. It will not save persistent settings, though. (That may change in the future.)
+Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can have up to 4 users talking simultaneously.
 
 ## Setup
 - Create a new Discord bot on https://discord.com/developers/applications.
@@ -22,7 +22,8 @@ Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can 
 - Type `rb!settings` while you have a session open to view your current settings.
 - Use `rb!connect` *WHILE YOU ARE IN A VOICE CHANNEL **AND** WHILE YOU HAVE A SESSION OPEN* to get the bot to connect to the voice channel.
 - The bot will now read out anything *you specifically* type into the *voice chat associated with the voice channel you are in.* It will not read out messages anywhere else.
-- To close your session, type in `rb!close`.
+- To delete all your settings, be sure your session is open, then type `rb!delete`.
+- If you want to close your session but *NOT* delete settings, type in `rb!close`.
 - To disconnect the bot from a voice channel, type in `rb!disconnect`.
 
 ### Changing Settings
@@ -43,3 +44,5 @@ Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can 
 - `rb!speed` - change spoken speed
 - `rb!pitch` - change spoken pitch
 - `rb!express` - change spoken expressiveness
+- `rb!close` - close session
+- `rb!delete` - delete settings

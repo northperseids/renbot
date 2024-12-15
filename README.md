@@ -32,6 +32,7 @@ Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can 
 - Use `rb!pitch [pitch value]` to change pitch. Pitch value must be a number between 0.5 and 1.5.
 - Use `rb!speed [speed value]` to change speed. Speed value must be a number between 0 and 1.
 - Use `rb!express [expressiveness value]` to change expressiveness. Expressiveness value must be a number between 0 and 1. (Lower is less expressive, higher is more expressive.)
+- Use `rb!sayname [true/false]` to change whether the bot says your username along with your message (defaults to false).
 
 ## All commands
 
@@ -44,5 +45,6 @@ Simple self-hosted TTS Discord bot using UnrealSpeech's text-to-speech API. Can 
 - `rb!speed` - change spoken speed
 - `rb!pitch` - change spoken pitch
 - `rb!express` - change spoken expressiveness
+- `rb!sayname` - change whether bot says username
 - `rb!close` - close session
 - `rb!delete` - delete settings

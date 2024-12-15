@@ -30,6 +30,7 @@ class User():
         self.speed = speed
         self.pitch = pitch
         self.temperature = temperature
+        self.sayname = False
 
 def save_users(arr):
     with open('settings.json', 'w') as f:
@@ -87,13 +88,13 @@ async def on_message(message):
             return
         
     if msg.startswith(prefix + 'help'):
-        await message.channel.send(f'Hello!\n\nUp to 4 users can use this bot at once.\n\nTo get started, type in `{prefix}start`. This will open a session for you with a default voice, speed, pitch, and expression. Once you get the bot to join your voice channel, the bot will read out anything you type in the VOICE CHANNEL CHAT.\n\nTo change the voice, speed, pitch, or expressiveness, use the commands:\n- {prefix}voice [voice]\n- {prefix}speed [speed]\n- {prefix}pitch [pitch]\n- {prefix}express [expressiveness]\n\nThe possible voices are Liv, Scarlett, Amy, Will, and Dan. For speed and expressiveness, enter a number between 0 and 1. For pitch, a number between 0.5 and 1.5.\n\nTo get the bot to join a voice channel, type in `{prefix}connect`. You will need to both have an open session *AND* be in a voice channel yourself in order for the bot to know where to join. To disconnect, type in `{prefix}disconnect`.')
+        await message.channel.send(f'Hello!\n\nUp to 4 users can use this bot at once.\n\nTo get started, type in `{prefix}start`. This will open a session for you with a default voice, speed, pitch, and expression. Once you get the bot to join your voice channel, the bot will read out anything you type in the VOICE CHANNEL CHAT.\n\nTo change the voice, speed, pitch, expressiveness, or to get the bot to read your username along with your message, use the commands:\n- {prefix}voice [voice]\n- {prefix}speed [speed]\n- {prefix}pitch [pitch]\n- {prefix}express [expressiveness]\n- {prefix}sayname [true/false]\n\nThe possible voices are Liv, Scarlett, Amy, Will, and Dan. For speed and expressiveness, enter a number between 0 and 1. For pitch, a number between 0.5 and 1.5. For saying your username, true=says the name, false=does not say the name.\n\nTo get the bot to join a voice channel, type in `{prefix}connect`. You will need to both have an open session *AND* be in a voice channel yourself in order for the bot to know where to join. To disconnect, type in `{prefix}disconnect`.')
         return
 
     if msg.startswith(prefix + 'settings'):
         for user in users:
             if user['id'] == message.author.id:
-                await message.channel.send(f"User session for {message.author.name}:\n\n**Voice:** {user['voicename']}\n**Speed:** {user['speed']}\n**Pitch:** {user['pitch']}\n**Expressiveness:** {user['temperature']}")
+                await message.channel.send(f"User session for {message.author.name}:\n\n**Voice:** {user['voicename']}\n**Speed:** {user['speed']}\n**Pitch:** {user['pitch']}\n**Expressiveness:** {user['temperature']}\n**Say username:** {user['sayname']}")
                 return
         await message.channel.send('No open session found.')
         return
@@ -173,6 +174,24 @@ async def on_message(message):
                 return
         await message.channel.send('No open session found.')
         return
+    
+    if msg.startswith(prefix + 'sayname '):
+        mes = message.content[11:]
+        if mes == 'true':
+            for user in users:
+                if user['id'] == message.author.id:
+                    user['sayname'] = True
+                    await message.channel.send(f'Saying names changed to {mes}. Bot will now read your username.')
+                    save_user(user)
+                    return
+        else:
+            for user in users:
+                if user['id'] == message.author.id:
+                    user['sayname'] = False
+                    await message.channel.send(f'Saying names changed to {mes}. Bot will not read your username.')
+                    save_user(user)
+                    return
+
 
     if msg.startswith(prefix + 'close'):
         try:
@@ -224,11 +243,18 @@ async def on_message(message):
                 voice_channel = discord.utils.get(client.voice_clients, guild=message.guild)
                 if voice_channel is None:
                     return
+                
+                say_username = user['sayname']
 
                 # Generate audio from text
-                audio_data = speech_api.stream(
-                    text=msg, voice_id=user['voicename'], bitrate=BITRATE, speed=user['speed'], pitch=user['pitch'], temperature=user['temperature']
-                )
+                if say_username == False:
+                    audio_data = speech_api.stream(
+                        text=msg, voice_id=user['voicename'], bitrate=BITRATE, speed=user['speed'], pitch=user['pitch'], temperature=user['temperature']
+                    )
+                else:
+                    audio_data = speech_api.stream(
+                        text=f'{message.author.name} said {msg}', voice_id=user['voicename'], bitrate=BITRATE, speed=user['speed'], pitch=user['pitch'], temperature=user['temperature']
+                    )
 
                 stream = io.BytesIO(audio_data)
 

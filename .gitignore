@@ -1,0 +1,10 @@
+**pycache**
+bin/
+include/
+lib/
+lib64/
+share/
+.env
+eleven.py
+pyvenv.cfg
+test.py

@@ -11,20 +11,13 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 prefix = 'rb!'
 
-# ---------- EDIT UNDER HERE
-
-# Get your API key from unrealspeech.com - follow github instructions.
-api_key = 'b9NSkg3mzfveRHrGu9ivwRwWzLmhrOsYATTIOMusRnJoZkNH8gRMZF'
-
-# Don't change this unless you really know what you're doing!
-BITRATE = "192k"
-
-# ---------- DO NOT EDIT PAST HERE
-
-speech_api = UnrealSpeechAPI(api_key)
-
 dotenv.load_dotenv()
 token = str(os.getenv("TOKEN"))
+api_key = str(os.getenv("API_KEY"))
+
+BITRATE = "192k"
+
+speech_api = UnrealSpeechAPI(api_key)
 
 users = []
 
